@@ -35,8 +35,7 @@ EOF
     fi
 fi
 
-myDir=$(readlink -f "$0")
-myDir=$(dirname "$myDir")
+myDir=`pwd $0`
 set -x
 
 cd "$myDir/example-generator"
@@ -46,7 +45,7 @@ cabal install --force-reinstalls
 
 cd "$myDir/example-cpp"
 cabal configure --ghc-options=-Werror
-cabal build
+cabal -v3 build
 cabal install --force-reinstalls
 
 cd "$myDir/example"

@@ -35,8 +35,7 @@ EOF
     fi
 fi
 
-projectDir=$(readlink -f "$0")
-projectDir=$(dirname "$projectDir")
+projectDir=`pwd $0`
 set -x
 
 cd "$projectDir/generator"
