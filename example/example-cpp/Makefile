@@ -21,7 +21,7 @@ INCS=-I/Users/gmt/JUCE/modules/
 OS=$(shell ghc -e ":m +System.Info" -e "putStrLn os")
 
 CC = g++
-CFLAGS = -O2 $(INCS) -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1 -DDEBUG --std=c++11 # -undefined dynamic_lookup
+CFLAGS = -O2 $(INCS) -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1 -DDEBUG=1 --std=c++11 -undefined dynamic_lookup
 
 .PHONY: clean install
 
