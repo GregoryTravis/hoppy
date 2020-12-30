@@ -38,18 +38,33 @@ fi
 myDir=`pwd $0`
 set -x
 
+blip () {
+  : #find ~/hoppy -ls > ~/hoppy/listing.`unique`
+}
+
 cd "$myDir/example-generator"
 cabal configure --ghc-options=-Werror
+blip
 cabal build
+blip
 cabal install --force-reinstalls
+blip
 
 cd "$myDir/example-cpp"
 cabal configure --ghc-options=-Werror
-cabal -v3 build
+blip
+cabal build
+exit
+blip
 cabal install --force-reinstalls
+blip
 
 cd "$myDir/example"
 cabal configure --ghc-options=-Werror --enable-tests
+blip
 cabal build
+blip
 cabal test
+blip
 cabal install --force-reinstalls --enable-tests
+blip

@@ -17,16 +17,21 @@
 module Foreign.Hoppy.Example.Generator (interfaceResult) where
 
 import Foreign.Hoppy.Generator.Spec (
+  Class,
   Function,
   Interface,
   Module,
   Purity (Nonpure),
   addReqIncludes,
   ident,
+  ident1,
   includeLocal,
   interface,
   interfaceAddHaskellModuleBase,
   makeFn,
+  makeClass,
+  toExtName,
+  mkCtor,
   makeModule,
   moduleAddExports,
   moduleModify',
@@ -35,6 +40,7 @@ import Foreign.Hoppy.Generator.Spec (
   toExport,
   )
 import Foreign.Hoppy.Generator.Std (c_string, mod_std)
+import Foreign.Hoppy.Generator.Spec (np)
 import Foreign.Hoppy.Generator.Types (objT)
 
 interfaceResult :: Either String Interface
@@ -50,9 +56,19 @@ interfaceResult = do
 mod_example :: Module
 mod_example =
   moduleModify' (makeModule "utils" "gen_utils.hpp" "gen_utils.cpp") $
-  moduleAddExports [toExport f_reverse]
+  moduleAddExports [toExport f_reverse, toExport c_MidiMessage]
 
 f_reverse :: Function
 f_reverse =
   addReqIncludes [includeLocal "utils.hpp"] $
   makeFn (ident "reverse") Nothing Nonpure [objT c_string] $ objT c_string
+
+c_MidiMessage :: Class
+c_MidiMessage =
+  addReqIncludes [includeLocal "/Users/gmt/Loopo/JuceLibraryCode/JuceHeader.h"] $
+  makeClass (ident1 "juce" "MidiMessage") (Just $ toExtName "JuceMidiMessage")
+  []
+  [ mkCtor "new" np -- ([] :: [Parameter])
+  --, mkConstMethod "at" [intT] charT
+  --, mkConstMethod "string" [] sizeT
+  ]

@@ -16,16 +16,18 @@
 
 .PHONY: all
 
+INCS=-I/Users/gmt/JUCE/modules/
+
 OS=$(shell ghc -e ":m +System.Info" -e "putStrLn os")
 
 CC = g++
-CFLAGS = -O2
+CFLAGS = -O2 $(INCS) -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1 -DDEBUG --std=c++11 # -undefined dynamic_lookup
 
 .PHONY: clean install
 
 all: cpp/libexample.so
 
-cpp/libexample.so: cpp/utils.o cpp/gen_utils.o cpp/gen_std.o
+cpp/libexample.so: cpp/utils.o cpp/gen_utils.o cpp/gen_std.o #cpp/juce_MidiMessage.o
 ifeq ($(OS),darwin)
 	$(CC) $(CFLAGS) -dynamic -shared -fPIC -install_name @rpath/libexample.so -o $@ $^
 else
@@ -34,6 +36,9 @@ endif
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -fPIC -c -o $@ $<
+
+# cpp/juce_MidiMessage.o: /Users/gmt/JUCE/modules/juce_audio_basics/midi/juce_MidiMessage.cpp
+# 	$(CC) $(CFLAGS) -fPIC -c -o cpp/juce_MidiMessage.o  /Users/gmt/JUCE/modules/juce_audio_basics/midi/juce_MidiMessage.cpp
 
 clean:
 	rm -f cpp/utils.o cpp/gen_utils.o cpp/gen_std.o cpp/libexample.so
