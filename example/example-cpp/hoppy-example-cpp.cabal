@@ -12,7 +12,6 @@ extra-source-files:
   cpp/utils.cpp
   cpp/utils.hpp
 
-
 custom-setup
   setup-depends:
       base
