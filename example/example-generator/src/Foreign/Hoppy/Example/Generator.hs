@@ -32,6 +32,7 @@ import Foreign.Hoppy.Generator.Spec (
   makeClass,
   toExtName,
   mkCtor,
+  mkConstMethod,
   makeModule,
   moduleAddExports,
   moduleModify',
@@ -41,7 +42,7 @@ import Foreign.Hoppy.Generator.Spec (
   )
 import Foreign.Hoppy.Generator.Std (c_string, mod_std)
 import Foreign.Hoppy.Generator.Spec (np)
-import Foreign.Hoppy.Generator.Types (objT)
+import Foreign.Hoppy.Generator.Types (objT, intT, constT, ptrT, ucharT)
 
 interfaceResult :: Either String Interface
 interfaceResult = do
@@ -69,6 +70,9 @@ c_MidiMessage =
   makeClass (ident1 "juce" "MidiMessage") (Just $ toExtName "JuceMidiMessage")
   []
   [ mkCtor "new" np -- ([] :: [Parameter])
+  , mkCtor "newFromInties" [intT, intT, intT]
+  -- const uint8 * 	getRawData ()
+  , mkConstMethod "getRawData" np (ptrT (constT ucharT))
   --, mkConstMethod "at" [intT] charT
   --, mkConstMethod "string" [] sizeT
   ]

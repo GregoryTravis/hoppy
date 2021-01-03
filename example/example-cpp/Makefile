@@ -25,13 +25,14 @@ CFLAGS = -O2 $(INCS) -DJUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1 -DDEBUG=1 --std=c+
 
 .PHONY: clean install
 
-all: cpp/libexample.so
+all: cpp/libexample.a
 
-cpp/libexample.so: cpp/utils.o cpp/gen_utils.o cpp/gen_std.o #cpp/juce_MidiMessage.o
+cpp/libexample.a: cpp/utils.o cpp/gen_utils.o cpp/gen_std.o #cpp/juce_MidiMessage.o
 ifeq ($(OS),darwin)
-	$(CC) $(CFLAGS) -dynamic -shared -fPIC -install_name @rpath/libexample.so -o $@ $^
+	#$(CC) $(CFLAGS) -fPIC -o $@ $^
+	ar rvs $@ $^
 else
-	$(CC) $(CFLAGS) -dynamic -shared -fPIC -o $@ $^
+	$(CC) $(CFLAGS) -fPIC -o $@ $^
 endif
 
 %.o: %.cpp
@@ -41,11 +42,11 @@ endif
 # 	$(CC) $(CFLAGS) -fPIC -c -o cpp/juce_MidiMessage.o  /Users/gmt/JUCE/modules/juce_audio_basics/midi/juce_MidiMessage.cpp
 
 clean:
-	rm -f cpp/utils.o cpp/gen_utils.o cpp/gen_std.o cpp/libexample.so
+	rm -f cpp/utils.o cpp/gen_utils.o cpp/gen_std.o cpp/libexample.a
 
 install:
 ifeq ($(OS),darwin)
-	install cpp/libexample.so "$(libdir)"
+	install cpp/libexample.a "$(libdir)"
 else
-	install -t "$(libdir)" cpp/libexample.so
+	install -t "$(libdir)" cpp/libexample.a
 endif

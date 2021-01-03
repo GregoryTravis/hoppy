@@ -76,7 +76,7 @@ cabal -v configure --ghc-options=-Werror --enable-tests
 blip "cabal configure --ghc-options=-Werror --enable-tests"
 cabal -v build
 blip "cabal build"
-cabal -v test
-blip "cabal test"
+# cabal -v test
+# blip "cabal test"
 cabal -v install --force-reinstalls --enable-tests
 blip "cabal install --force-reinstalls --enable-tests"
